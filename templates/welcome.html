@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Welcome</h1>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <button type="submit" class="button">Upload</button>
+    </form><br>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Comment</th>
+                <th>Size</th>
+                <th>Download</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for file in files %}
+                <tr>
+                    <td>{{ file.file.name }}</td>
+                    <td>{{ file.comment }}</td>
+                    <td>{{ file.file.size }}</td>
+                    <td><a href="{{ file.file.url }}">Download</a></td>
+                    <td>
+                        <form method="post" action="{% url 'delete' file.pk %}">
+                            {% csrf_token %}
+                            <button type="submit">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
