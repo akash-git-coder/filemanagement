@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.shortcuts import render, redirect
 from .forms import FileForm
 
@@ -17,15 +18,16 @@ def welcome(request):
 
 def login(request):
     if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        if username == "akashcoder" and password == "Fire":
+        form = AuthenticationForm(data=request.POST)
+        if form.is_valid():
             return redirect('welcome')
         else:
             messages.info(request, 'Invalid Credentials!')
             return redirect('login')
     else:
-        return render(request, 'login.html')
+        form = AuthenticationForm()
+
+    return render(request, 'login.html', {"form": form})
 
 
 def upload(request):
@@ -46,3 +48,16 @@ def delete(request, pk):
         file = Files.objects.get(pk=pk)
         file.delete()
     return redirect('welcome')
+
+
+def signup(response):
+    if response.method == 'POST':
+        form = UserCreationForm(response.POST)
+        if form.is_valid():
+            form.save()
+
+        return redirect("/welcome")
+    else:
+        form = UserCreationForm()
+
+    return render(response, "signup.html", {"form": form})

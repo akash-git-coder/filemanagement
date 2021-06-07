@@ -25,6 +25,7 @@ urlpatterns = [
     path('upload/', include('filemanager.urls')),
     path('login/', include('filemanager.urls')),
     path('welcome/<int:pk>/', include('filemanager.urls')),
+    path('signup/', include('filemanager.urls')),
     path('admin/', admin.site.urls),
 ]
 
